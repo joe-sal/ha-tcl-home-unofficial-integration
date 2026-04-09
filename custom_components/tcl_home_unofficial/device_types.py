@@ -58,7 +58,7 @@ def calculateDeviceType(device_type: str) -> DeviceTypeEnum | None:
         return DeviceTypeEnum.SPLIT_AC_FRESH_AIR
     elif device_type == "Window AC":
         return DeviceTypeEnum.WINDOW_AC
-    elif device_type == "Cylindrical AC":       # <-- NEU (VOR dem Split AC Check!)
+    elif device_type == "Cylindrical AC":       # Keep this before the Split AC check.
         return DeviceTypeEnum.CYLINDRICAL_AC
     elif device_type == "Duct":
         return DeviceTypeEnum.DUCT_AC
