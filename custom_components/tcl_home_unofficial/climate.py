@@ -113,6 +113,7 @@ async def async_setup_entry(
                     device=device,
                     type="SplitAc"
                     if device.device_type == DeviceTypeEnum.SPLIT_AC
+                    or device.device_type == DeviceTypeEnum.CYLINDRICAL_AC
                     else "ClimateControll",
                     name="Climate",
                     power_switch_feature=DeviceFeatureEnum.SWITCH_POWER,

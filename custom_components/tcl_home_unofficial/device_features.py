@@ -188,6 +188,49 @@ def getSupportedFeatures(
                     features.append(DeviceFeatureEnum.SENSOR_SPLIT_AC_TVOC_VALUE)
 
                 return features
+            case DeviceTypeEnum.CYLINDRICAL_AC:
+                features = [
+                    DeviceFeatureEnum.INTERNAL_IS_AC,
+                    DeviceFeatureEnum.MODE_AC_AUTO,
+                    DeviceFeatureEnum.MODE_AC_COOL,
+                    DeviceFeatureEnum.MODE_AC_DEHUMIDIFICATION,
+                    DeviceFeatureEnum.MODE_AC_FAN,
+                    DeviceFeatureEnum.MODE_AC_HEAT,
+                    DeviceFeatureEnum.SENSOR_CURRENT_TEMPERATURE,
+                    DeviceFeatureEnum.SENSOR_IS_ONLINE,
+                    DeviceFeatureEnum.SWITCH_POWER,
+                    DeviceFeatureEnum.SWITCH_BEEP,
+                    DeviceFeatureEnum.SWITCH_HEALTHY,
+                    DeviceFeatureEnum.SWITCH_DRYING,
+                    DeviceFeatureEnum.SWITCH_SCREEN,
+                    DeviceFeatureEnum.SELECT_MODE,
+                    DeviceFeatureEnum.SELECT_VERTICAL_DIRECTION,
+                    DeviceFeatureEnum.SELECT_HORIZONTAL_DIRECTION,
+                    DeviceFeatureEnum.SELECT_SLEEP_MODE,
+                    DeviceFeatureEnum.NUMBER_TARGET_TEMPERATURE,
+                    DeviceFeatureEnum.CLIMATE,
+                    DeviceFeatureEnum.USER_CONFIG_BEHAVIOR_MEMORIZE_TEMP_BY_MODE,
+                    DeviceFeatureEnum.USER_CONFIG_BEHAVIOR_MEMORIZE_FAN_SPEED_BY_MODE,
+                    DeviceFeatureEnum.USER_CONFIG_BEHAVIOR_SILENT_BEEP_WHEN_TURN_ON,
+                ]
+                if has_power_consumption_data:
+                    features.append(DeviceFeatureEnum.SENSOR_POWER_CONSUMPTION_DAILY)
+                if has_work_time_data:
+                    features.append(DeviceFeatureEnum.SENSOR_WORK_TIME_DAILY)
+                if len(capabilities) > 0:
+                    if DeviceCapabilityEnum.CAPABILITY_GENERATOR_MODE in capabilities:
+                        features.append(DeviceFeatureEnum.SELECT_GENERATOR_MODE)
+                if has_property(aws_thing_state_reported, "windSpeed7Gear"):
+                    features.append(DeviceFeatureEnum.SELECT_WIND_SPEED_7_GEAR)
+                if has_property(aws_thing_state_reported, "externalUnitTemperature"):
+                    features.append(DeviceFeatureEnum.SENSOR_EXTERNAL_UNIT_TEMPERATURE)
+                if has_property(aws_thing_state_reported, "AIECOSwitch"):
+                    features.append(DeviceFeatureEnum.SWITCH_AI_ECO)
+                if has_property(aws_thing_state_reported, "targetFahrenheitTemp"):
+                    features.append(DeviceFeatureEnum.INTERNAL_SET_TFT_WITH_TT)
+                if has_property(aws_thing_state_reported, "internalUnitCoilTemperature"):
+                    features.append(DeviceFeatureEnum.SENSOR_INTERNAL_UNIT_COIL_TEMPERATURE)
+                return features
             case DeviceTypeEnum.SPLIT_AC_FRESH_AIR:
                 features = [
                     DeviceFeatureEnum.INTERNAL_IS_AC,

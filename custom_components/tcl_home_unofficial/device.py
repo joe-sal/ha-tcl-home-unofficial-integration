@@ -37,6 +37,9 @@ from .tcl_device_spit_ac_fresh_air import (
 from .tcl_device_window_ac import (TCL_WindowAC_DeviceData,
                                    get_stored_window_ac_data,
                                    handle_window_ac_mode_change)
+from .tcl_device_cylindrical_ac import (TCL_CylindricalAC_DeviceData,
+                                        get_stored_cylindrical_ac_data,
+                                        handle_cylindrical_ac_mode_change)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -134,6 +137,12 @@ class Device:
                         aws_thing_state=aws_thing["state"]["reported"],
                         delta=aws_thing["state"].get("delta", {}),
                     )
+                case DeviceTypeEnum.CYLINDRICAL_AC:
+                    self.data = TCL_CylindricalAC_DeviceData(
+                        device_id=self.device_id,
+                        aws_thing_state=aws_thing["state"]["reported"],
+                        delta=aws_thing["state"].get("delta", {}),
+                    )
                 case DeviceTypeEnum.DEHUMIDIFIER_DEM:
                     self.data = TCL_Dehumidifier_DEM_DeviceData(
                         device_id=self.device_id,
@@ -188,6 +197,7 @@ class Device:
         | TCL_SplitAC_Fresh_Air_DeviceData
         | TCL_PortableAC_DeviceData
         | TCL_WindowAC_DeviceData
+        | TCL_CylindricalAC_DeviceData
         | TCL_Dehumidifier_DEM_DeviceData
         | TCL_Dehumidifier_DF_DeviceData
         | TCL_DuctAC_DeviceData
@@ -356,6 +366,8 @@ async def get_device_storage(hass: HomeAssistant, device: Device) -> None:
         return await get_stored_spit_ac_fresh_data(hass, device.device_id)
     elif device.device_type == DeviceTypeEnum.SPLIT_AC:
         return await get_stored_spit_ac_data(hass, device.device_id)
+    elif device.device_type == DeviceTypeEnum.CYLINDRICAL_AC:
+        return await get_stored_cylindrical_ac_data(hass, device.device_id)
     elif device.device_type == DeviceTypeEnum.DUCT_AC:
         return await get_stored_duct_ac_data(hass, device.device_id)
     elif device.device_type == DeviceTypeEnum.PORTABLE_AC:
@@ -387,6 +399,13 @@ def get_desired_state_for_mode_change(
         )
     elif device.device_type == DeviceTypeEnum.SPLIT_AC:
         desired_state = handle_split_ac_mode_change(
+            desired_state=desired_state,
+            value=value,
+            supported_features=device.supported_features,
+            stored_data=stored_data,
+        )
+    elif device.device_type == DeviceTypeEnum.CYLINDRICAL_AC:
+        desired_state = handle_cylindrical_ac_mode_change(
             desired_state=desired_state,
             value=value,
             supported_features=device.supported_features,
